@@ -1,6 +1,7 @@
 # What is happing?
 
 Forget about it. It's all my mistake.
+
 ~~HBaseRDD scan result is not equal to HBase scan when `scan.setStartRow` and `scan.setStopRow` are set.~~
 
 # How to run
@@ -11,7 +12,7 @@ sbt assembly
 bin/spark-submit --class Reproducer --master local[*] --name "test" hbase-spark-odd-scan-behavior-reproducer/target/scala-2.10/hbase-spark-odd-scan-behavior-reproducer-assembly-0.1-SNAPSHOT.jar
 ```
 
-This results in following assertion error, as I expect.
+This results in following assertion error, as I expected.
 
 ```
 Exception in thread "main" java.lang.AssertionError: assertion failed: HBase Scan: 7 != 10
