@@ -60,8 +60,22 @@ object Reproducer extends Logging {
     scan.setStartRow(HBaseMessageRowKey(1L, 1L).rowKey)
     scan.setStopRow(HBaseMessageRowKey(Long.MaxValue, Long.MaxValue).rowKey)
 
-    val hbaseMessageCount = countHBase(conn, table, family)
+    val hbaseMessageCount = countHBase(conn, table, scan)
     assert(hbaseMessageCount == n, s"HBase Scan: $hbaseMessageCount != $n")
+// My scan code was wrong after all...
+//    Exception in thread "main" java.lang.AssertionError: assertion failed: HBase Scan: 7 != 10
+//    at scala.Predef$.assert(Predef.scala:179)
+//    at Reproducer$.main(Reproducer.scala:64)
+//    at Reproducer.main(Reproducer.scala)
+//    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+//    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+//    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+//    at java.lang.reflect.Method.invoke(Method.java:497)
+//    at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:731)
+//    at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:181)
+//    at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:206)
+//    at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:121)
+//    at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
 
     val count = hbaseContext.hbaseRDD(table, scan).count()
     assert(count == n, s"HBase RDD: $count != $n")
@@ -83,9 +97,9 @@ object Reproducer extends Logging {
     sc.stop()
   }
 
-  def countHBase(conn: Connection, table: TableName, family: Array[Byte]): Int = {
+  def countHBase(conn: Connection, table: TableName, scan: Scan): Int = {
     val t = conn.getTable(table)
-    val s = t.getScanner(family)
+    val s = t.getScanner(scan)
     var i = 0
     var f = true
     try {

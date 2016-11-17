@@ -1,6 +1,7 @@
 # What is happing?
 
-HBaseRDD scan result is not equal to HBase scan when `scan.setStartRow` and `scan.setStopRow` are set.
+Forget about it. It's all my mistake.
+~~HBaseRDD scan result is not equal to HBase scan when `scan.setStartRow` and `scan.setStopRow` are set.~~
 
 # How to run
 
@@ -10,12 +11,12 @@ sbt assembly
 bin/spark-submit --class Reproducer --master local[*] --name "test" hbase-spark-odd-scan-behavior-reproducer/target/scala-2.10/hbase-spark-odd-scan-behavior-reproducer-assembly-0.1-SNAPSHOT.jar
 ```
 
-This results in following assertion error.
+This results in following assertion error, as I expect.
 
 ```
-Exception in thread "main" java.lang.AssertionError: assertion failed: HBase RDD: 7 != 10
+Exception in thread "main" java.lang.AssertionError: assertion failed: HBase Scan: 7 != 10
 	at scala.Predef$.assert(Predef.scala:179)
-	at Reproducer$.main(Reproducer.scala:67)
+	at Reproducer$.main(Reproducer.scala:64)
 	at Reproducer.main(Reproducer.scala)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
